@@ -12,16 +12,24 @@ void *cuenta(char *);
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc < 2)
     {
         printf("Indica el nombre de un fichero.\n");
         exit(0);
     }
-    pthread_t tid;
-    int val = argv[1];
+    pthread_t tid[argc];
 
-    pthread_create(&tid, NULL, cuenta, &val);
-    pthread_join(tid, NULL) return 0;
+    for (int i = 0; i < argc - 1; i++)
+    {
+        char *val = argv[i + 1];
+        pthread_create(&tid[i], NULL, cuenta, val);
+    }
+    for (int j = 0; j < argc - 1; j++)
+    {
+        pthread_join(tid[j], NULL);
+    }
+
+    return 0;
 }
 
 void *cuenta(char *nombre)
