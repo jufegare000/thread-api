@@ -11,7 +11,9 @@
             "program": "${fileDirname}/${fileBasenameNoExtension}",
             "args": [
                 "3",
-                "6"
+                "6",
+                "9",
+                "12"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

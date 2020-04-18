@@ -11,11 +11,12 @@ int main(int argc, char *argv[])
     srand(time(0));
     pthread_t arrayIds[argc];
     int results[argc];
-    for (int i = 0; i < argc; i++)
+    for (int i = 0; i < argc - 1; i++)
     {
-        pthread_create(&arrayIds[i], NULL, &factorial, atoi(argv[i + 1]));
+        int valdir = atoi(argv[i + 1]);
+        pthread_create(&arrayIds[i], NULL, &factorial, &valdir);
     }
-    for (int j = 0; j < argc; j++)
+    for (int j = 0; j < argc - 1; j++)
     {
         pthread_join(arrayIds[j], (void *)&results[j]);
         printf("Factorial de: %d es: %lld con identificador: %d\n",
