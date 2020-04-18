@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
             "args": [
-                "texto.txt"
+                "numeros.txt"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
