@@ -1,10 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
+
+void *readCSV();
+
+typedef struct arr
+{
+    int n;
+    float *data;
+} my_array;
+
+void add_item(my_array *arr, float item);
 
 void main()
 {
 
+    readCSV();
+    return 0;
+}
+
+void *readCSV()
+{
     FILE *fp = fopen("fichero_notas.csv", "r");
 
     if (!fp)
@@ -29,26 +46,14 @@ void main()
         char *field = strtok(buf, ",");
         while (field)
         {
-            if (field_count == 0)
-            {
-                printf("First Name:\t");
-            }
             if (field_count == 1)
             {
-                printf("Last Name:\t");
-            }
-            if (field_count == 2)
-            {
-                printf("Phone Number:\t");
-            }
-            if (field_count == 3)
-            {
-                printf("Job Title:\t");
+                printf("Note:\t");
+                printf("%s\n", field);
+                int currentValue = field;
             }
 
-            printf("%s\n", field);
             field = strtok(NULL, ",");
-
             field_count++;
         }
         printf("\n");
