@@ -79,16 +79,16 @@ void cuenta (char *nombre) {
 
 5. Se requiere un programa que reciba un vector de números a través de un archivo de texto. La idea es que el programa sume todos los números del vector. Implemente el programa de dos maneras: la primera de una forma estrictamente secuencial. La segunda forma es creando dos hilos, de manera que cada uno de ellos realice la sumatoria de la mitad de los componentes del vector. El hilo 1 sumará los primeros datos del vector y el hilo 2 los últimos. Luego cuando los dos hilos finalicen muestre en pantalla el resultado.
    * Realice el programa de manera genérica, de tal forma que sea posible ingresar vectores de cualquier tamaño.<br>
-   **El verctor está en el archivo "numeros.txt"**
+   <b>El verctor está en el archivo "numeros.txt"</b>
    <br>
    * Mida el tiempo de ejecución de ambas implementaciones para varios tamaños del vector 
    *  ¿El resultado obtenido es acorde a lo que usted esperaba?
-   <br>
-   **Si, poara cantidades pequeñas de numeros es más eficiente la suma secuencial (p5a.c), pero para cantidades mayores se comporta mejor con hilos(p5b.c)**
-   <br>
+   <br><br>
+   <b>Si, para cantidades pequeñas de numeros es más eficiente la suma secuencial (p5a.c),pero para cantidades mayores se comporta mejor con hilos(p5b.c)</b>
+   <br><br>
    Describa la técnica que usó para realizar la medición del tiempo. ¿Cuáles son las debilidades de esta técnica? ¿Existe otra forma de medir el tiempo de ejecución de un programa?
   <br>
-   **Para la medición del tiempo se uso la función "gettimeofday", tomando el tiempo al inicio de la suma y al final, luego se hace la resta y se imprime el valor en milisegundos**
+   <b>Para la medición del tiempo se uso la función "gettimeofday", tomando el tiempo al inicio de la suma y al final, luego se hace la resta y se imprime el valor en milisegundos</b><br><br>
 
 6. El profesor de un curso desea un programa en lenguaje C que calcule la desviación estándar (símbolo σ o s) de las notas obtenidas por sus estudiantes en el curso 
 
