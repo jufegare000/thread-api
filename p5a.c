@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 typedef  struct arr
 {
@@ -25,11 +26,17 @@ int main(int argc, char *argv[])
    my_array arr={};
    get_vector_from_file(argv[1],&arr);
    float sum=0;
+   struct timeval ti, tf;
+   double tiempo;
+   gettimeofday(&ti, NULL);   // Instante inicial
    sum_secuential(&arr,&sum);
-   print_values(&arr);
+   gettimeofday(&tf, NULL);   // Instante final
+   tiempo= (tf.tv_sec - ti.tv_sec)*1000 + (tf.tv_usec - ti.tv_usec)/1000.0;
+   //print_values(&arr);
    printf("numero de items: %d \n",arr.n);
    printf("resultado suma: %f \n",sum);
    free_arr(&arr);
+   printf("Total tiempo: %g milisegundos\n", tiempo);
    return EXIT_SUCCESS;
 }
 
@@ -53,7 +60,6 @@ void* get_vector_from_file(char *file_name, my_array *arr){
     add_item(arr,new_value);
     line_size = getline(&line_buf, &line_buf_size, fp);
   }
-  printf("Resultado suma: %f \n",sum);
   free(line_buf);
   line_buf = NULL;
   fclose(fp);
@@ -68,9 +74,9 @@ void add_item(my_array *arr, float item){
     }
     else
     {
-        tmp = realloc(arr->data, sizeof(float));
+        arr->n=arr->n+1;
+        tmp = realloc(arr->data, arr->n*sizeof(float));
         if (tmp != NULL) {
-            arr->n=arr->n+1;
             arr->data=tmp;
         }
     }
