@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 typedef  struct arr
 {
@@ -12,30 +13,63 @@ typedef  struct arr
     float *data;
 } my_array;
 
+typedef  struct args
+{
+    my_array *arr;
+    int init;
+    int end;
+} my_args;
+
+
 void* get_vector_from_file(char *file_name, my_array *arr);
 void add_item(my_array *arr, float item);
 float get_item(my_array *arr, int index);
 void print_values(my_array *arr);
 void free_arr(my_array *arr);
-void sum_between(my_array *arr, int init, int end, float *sum);
+void *sum_between(void *args);
 
 
 int main(int argc, char *argv[])
 {
    my_array arr={};
    get_vector_from_file(argv[1],&arr);
-   float sum1,sum2=0;
+   
    int mitad=(int) arr.n/2;
-   sum_between(&arr,0,mitad,&sum1);
-   sum_between(&arr,mitad,arr.n,&sum2);
-   print_values(&arr);
-   printf("numero de items: %d \n",arr.n);
-   printf("mitad: %f \n",mitad);
-   printf("resultado suma primer mitad: %f \n",sum1);
-   printf("resultado suma segunda mitad: %f \n",sum2);
-   printf("resultado total: %f \n",(sum2+sum1));
-   free_arr(&arr);
-   return EXIT_SUCCESS;
+
+    my_args args1={&arr,0,mitad};
+    my_args args2={&arr,mitad,arr.n};
+
+    pthread_t id1;
+    pthread_t id2;
+    float *sum1, *sum2;
+    
+    struct timeval ti, tf;
+    double tiempo;
+    gettimeofday(&ti, NULL);   // Instante inicial
+
+    pthread_create(&id1, NULL, &sum_between, &args1);
+    pthread_create(&id2, NULL, &sum_between, &args2);
+
+    pthread_join(id1, (void **)&sum1);
+    pthread_join(id2, (void **)&sum2);
+
+    float val1=*sum1;
+    float val2=*sum2;
+
+    gettimeofday(&tf, NULL);   // Instante final
+    tiempo= (tf.tv_sec - ti.tv_sec)*1000 + (tf.tv_usec - ti.tv_usec)/1000.0;
+    
+    //print_values(&arr);
+    printf("numero de items: %d \n",arr.n);
+    //printf("mitad: %d \n",mitad);
+    //printf("resultado suma primer mitad: %f \n",val1);
+    //printf("resultado suma segunda mitad: %f \n",val2);
+    printf("resultado suma: %f \n",(val1+val2));
+    free_arr(&arr);
+    free(sum1);
+    free(sum2);
+    printf("Total tiempo: %g milisegundos\n", tiempo);
+    return EXIT_SUCCESS;
 }
 
 void* get_vector_from_file(char *file_name, my_array *arr){
@@ -58,7 +92,6 @@ void* get_vector_from_file(char *file_name, my_array *arr){
     add_item(arr,new_value);
     line_size = getline(&line_buf, &line_buf_size, fp);
   }
-  printf("Resultado suma: %f \n",sum);
   free(line_buf);
   line_buf = NULL;
   fclose(fp);
@@ -99,10 +132,17 @@ void free_arr(my_array *arr){
     free(arr->data);
 }
 
-void sum_between(my_array *arr, int init, int end, float *sum){
-     for(int i=init; i<end; i++){
-         *sum=*sum + get_item(arr,i);
+void *sum_between(void *arg){
+    my_args args=*((my_args *)arg);
+    float ret;
+    ret=0;
+    for(int i=args.init; i<args.end; i++){
+         ret=ret + get_item(args.arr,i);
     }
+   
+    float *returnf = malloc(sizeof(float));
+    *returnf = ret;
+    return returnf;
 }
 
 
