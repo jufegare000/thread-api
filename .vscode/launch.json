@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${fileDirname}/${fileBasenameNoExtension}",
             "args": [
-                "numeros.txt"
+                "fichero_notas.csv"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
